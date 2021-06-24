@@ -27,6 +27,8 @@ import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.DefaultLoadControl;
+import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.util.Util;
 import io.flutter.plugin.common.EventChannel;
 import io.flutter.view.TextureRegistry;
@@ -67,7 +69,18 @@ final class VideoPlayer {
     this.textureEntry = textureEntry;
     this.options = options;
 
-    exoPlayer = new SimpleExoPlayer.Builder(context).build();
+    DefaultLoadControl.Builder loadBuilder = new DefaultLoadControl.Builder();
+    loadBuilder.setBufferDurationsMs(
+            DefaultLoadControl.DEFAULT_MIN_BUFFER_MS,
+            DefaultLoadControl.DEFAULT_MAX_BUFFER_MS,
+            1000,
+            1000);
+    LoadControl loadControl = loadBuilder.build();
+
+    exoPlayer = new SimpleExoPlayer.Builder(context)
+                .setLoadControl(loadControl)
+                .build();
+
 
     Uri uri = Uri.parse(dataSource);
 

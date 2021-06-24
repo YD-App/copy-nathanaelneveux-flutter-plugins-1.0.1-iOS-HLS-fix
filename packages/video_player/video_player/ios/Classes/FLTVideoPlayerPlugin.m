@@ -168,6 +168,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
 
 - (instancetype)initWithURL:(NSURL*)url frameUpdater:(FLTFrameUpdater*)frameUpdater {
   AVPlayerItem* item = [AVPlayerItem playerItemWithURL:url];
+  item.preferredForwardBufferDuration = 1;
   return [self initWithPlayerItem:item frameUpdater:frameUpdater];
 }
 
@@ -231,6 +232,7 @@ static inline CGFloat radiansToDegrees(CGFloat radians) {
   };
 
   _player = [AVPlayer playerWithPlayerItem:item];
+  _player.automaticallyWaitsToMinimizeStalling = false;
   _player.actionAtItemEnd = AVPlayerActionAtItemEndNone;
 
   [self createVideoOutputAndDisplayLink:frameUpdater];
